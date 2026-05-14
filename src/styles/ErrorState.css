@@ -1,0 +1,52 @@
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl);
+  border: 1px dashed var(--color-border);
+  background: rgba(0, 0, 0, 0.02);
+  text-align: center;
+  min-height: 400px;
+  grid-column: 1 / -1;
+}
+
+.error-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  margin-bottom: var(--space-md);
+  color: var(--color-accent);
+}
+
+.error-message {
+  font-family: var(--font-body);
+  color: var(--color-muted);
+  margin-bottom: var(--space-xl);
+  max-width: 400px;
+}
+
+.retry-button {
+  padding: var(--space-md) var(--space-xl);
+  background-color: var(--color-ink);
+  color: var(--color-bg);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: opacity var(--transition-fast);
+}
+
+.retry-button:hover {
+  opacity: 0.8;
+}
+
+.error-details {
+  margin-top: var(--space-xl);
+  font-size: 0.7rem;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.error-details summary {
+  list-style: none;
+}
