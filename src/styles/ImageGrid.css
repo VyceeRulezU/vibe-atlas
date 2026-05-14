@@ -3,6 +3,7 @@
   grid-template-columns: repeat(var(--grid-cols), 1fr);
   gap: var(--space-lg);
   width: 100%;
+  min-height: 400px;
 }
 
 .empty-state {

@@ -14,11 +14,16 @@ One press and the page fills with five fresh images in a chosen mood — calm, l
 
 ---
 
-## Demo
+## Live Demo
 
-![The Vibe Atlas — screenshot placeholder](./public/screenshot.png)
+[View The Vibe Atlas Live](https://vibe-atlas.vercel.app)
 
-> _Screenshot coming soon. Run locally to see it in action._
+---
+
+## Preview
+
+![The Vibe Atlas — Editorial Mood Board](./public/screenshot.png)
+
 
 ---
 
