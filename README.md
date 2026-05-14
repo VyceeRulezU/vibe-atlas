@@ -16,7 +16,7 @@ One press and the page fills with five fresh images in a chosen mood — calm, l
 
 ## Live Demo
 
-[View The Vibe Atlas Live](https://vibe-atlas.vercel.app)
+[View The Vibe Atlas Live](https://vyceerulezu.github.io/vibe-atlas/)
 
 ---
 
