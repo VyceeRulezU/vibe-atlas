@@ -22,7 +22,7 @@ One press and the page fills with five fresh images in a chosen mood — calm, l
 
 ## Preview
 
-![The Vibe Atlas — Editorial Mood Board](./public/screenshot.png)
+<!-- Screenshot coming soon -->
 
 
 ---
