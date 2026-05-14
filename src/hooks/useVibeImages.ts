@@ -11,32 +11,42 @@ export function useVibeImages() {
 
   const abortRef = useRef<AbortController | null>(null);
   const isFetchingRef = useRef<boolean>(false);
+  const currentFetchRef = useRef<{ mood: Mood; shuffle: number } | null>(null);
 
   const fetchImages = useCallback(async (mood: Mood, shuffle: number) => {
-    // Deduplication logic
-    if (isFetchingRef.current && mood === activeMood && shuffle === shuffleIndex) {
+    // Dedup: ignore if the exact same (mood, shuffle) is already in-flight
+    if (
+      isFetchingRef.current &&
+      currentFetchRef.current &&
+      mood === currentFetchRef.current.mood &&
+      shuffle === currentFetchRef.current.shuffle
+    ) {
       return;
     }
 
-    // Abort previous fetch if it's a different mood or a forced retry/shuffle
+    // Abort previous in-flight fetch
     if (abortRef.current) {
       abortRef.current.abort();
     }
 
-    abortRef.current = new AbortController();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    currentFetchRef.current = { mood, shuffle };
     isFetchingRef.current = true;
     setStatus('loading');
     setError(null);
 
     try {
-      // Create 5 fetch promises for the images
       const fetchPromises = Array.from({ length: 5 }, (_, i) => {
         const url = buildImageUrl(mood, i, shuffle);
-        return fetch(url, { signal: abortRef.current?.signal });
+        return fetch(url, { signal: controller.signal });
       });
 
       const results = await Promise.allSettled(fetchPromises);
-      
+
+      // If this batch was aborted, bail silently — another fetch took over
+      if (controller.signal.aborted) return;
+
       const successfulImages: VibeImage[] = results.map((result, i) => {
         if (result.status === 'fulfilled' && result.value.ok) {
           return {
@@ -46,18 +56,15 @@ export function useVibeImages() {
             height: 800
           };
         }
-        // Fallback for failed individual images is handled in ImageCard component,
-        // but here we mark it as a potential error slot if needed.
-        // For now, we return a shell that the component will handle.
         return {
           id: `${mood}-${shuffle}-${i}-failed`,
-          url: '', // Empty URL triggers error state in ImageCard
+          url: '',
           width: 600,
           height: 800
         };
       });
 
-      // If all failed, we might want to surface a global error
+      // Surface a global error only when all 5 genuinely failed (not aborted)
       const allFailed = results.every(r => r.status === 'rejected' || (r.status === 'fulfilled' && !r.value.ok));
       if (allFailed) {
         throw new Error('All image requests failed.');
@@ -72,7 +79,7 @@ export function useVibeImages() {
     } finally {
       isFetchingRef.current = false;
     }
-  }, [activeMood, shuffleIndex]);
+  }, []);
 
   const setMood = useCallback((mood: Mood) => {
     if (mood === activeMood && status === 'loading') return;
